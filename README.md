@@ -7,6 +7,12 @@ A smart value type converter for Baiji
 
 # Usage
 
+## Installation
+
+```bash
+npm install baiji-normalizer
+```
+
 ## Convert value
 
 ``` javascript
