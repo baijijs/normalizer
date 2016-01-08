@@ -1,6 +1,10 @@
 Baiji Normalizer
 ================
 
+[![Build Status](https://travis-ci.org/baijijs/normalizer.svg)](https://travis-ci.org/baijijs/normalizer)
+
+A smart value type converter for Baiji
+
 # Usage
 
 ## Convert value
