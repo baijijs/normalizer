@@ -16,6 +16,10 @@ npm install baiji-normalizer
 ## Convert value
 
 ``` javascript
+// Built-in Types
+// number, string, date, boolean
+
+
 var Normalizer = require('baiji-normalizer');
 
 // Number
