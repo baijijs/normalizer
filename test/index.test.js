@@ -36,6 +36,7 @@ describe('Normalizer', function() {
 
     it('should allow convert array as specific type', function() {
       expect(Normalizer.convert(1, ['number'])).eql([1]);
+      expect(Normalizer.convert('1,2', ['number'], { arrayItemDelimiters: ',' })).eql([1,2]);
       expect(function() {
         Normalizer.convert(1, ['number', 'string']);
       }).to.throw(Error);
@@ -68,11 +69,14 @@ describe('Normalizer', function() {
 
     it('should be converted as any', function() {
       expect(new Normalizer(undefined).to('any')).to.equal(undefined);
+      expect(new Normalizer('undefined').to('any')).to.equal(undefined);
       expect(new Normalizer(null).to('any')).to.equal(null);
-      expect(new Normalizer('123').to('any')).to.equal('123');
+      expect(new Normalizer('null').to('any')).to.equal(null);
+      expect(new Normalizer('123').to('any')).to.equal(123);
       expect(new Normalizer(123).to('any')).to.equal(123);
       expect(new Normalizer([123]).to('any')).to.eql([123]);
       expect(new Normalizer({ a: 1 }).to('any')).to.eql({ a: 1 });
+      expect(new Normalizer({ a: '1' }).to('any')).to.eql({ a: 1 });
     });
 
     it('should be converted as boolean', function() {

@@ -79,10 +79,27 @@ Normalizer.getConverter = function(type) {
  * @returns {Object}
  */
 Normalizer.convert = function(val, toType, opts) {
+  if (!opts) opts = {};
   if (Array.isArray(toType)) {
     assert(toType.length === 1, 'Multiple types converter is not allowed');
+
+    // If we expect an array type and we received a string, parse it with JSON.
+    // If that fails, parse it with the arrayItemDelimiters option.
+    if (val && typeof val === 'string') {
+      var parsed = false;
+      if (val[0] === '[') {
+        try {
+          val = JSON.parse(val);
+          parsed = true;
+        } catch (e) { /* Do nothing */ }
+      }
+      if (!parsed && opts.arrayItemDelimiters) {
+        val = val.split(opts.arrayItemDelimiters);
+      }
+    }
+
     if (!Array.isArray(val)) {
-      if (val === undefined) {
+      if (val === undefined || val === '') {
         val = [];
       } else {
         val = [val];
@@ -176,7 +193,6 @@ Normalizer.define('boolean', function convertBoolean(val) {
         default:
           return true;
       }
-      break;
     case 'number':
       return Number.isNaN(val) ? false : val !== 0;
     default:
@@ -184,10 +200,59 @@ Normalizer.define('boolean', function convertBoolean(val) {
   }
 });
 
+/*!
+ * Integer test regexp.
+ */
+var isInt = /^[0-9]+$/;
+
+/*!
+ * Float test regexp.
+ */
+var isFloat = /^([0-9]+)?\.[0-9]+$/;
+
+function coerce(str) {
+  if (typeof str !== 'string') return str;
+  if ('undefined' === str) return undefined;
+  if ('null' === str) return null;
+  if ('true' === str) return true;
+  if ('false' === str) return false;
+  if (isFloat.test(str)) return parseFloat(str, 10);
+  if (isInt.test(str) && str.charAt(0) !== '0') return parseInt(str, 10);
+  return str;
+}
+
+// coerce every string in the given object / array
+function coerceAll(obj) {
+  var type = Array.isArray(obj) ? 'array' : typeof obj;
+  var i;
+  var n;
+
+  switch (type) {
+    case 'string':
+      return coerce(obj);
+    case 'object':
+      if (obj) {
+        var props = Object.keys(obj);
+        for (i = 0, n = props.length; i < n; i++) {
+          var key = props[i];
+          obj[key] = coerceAll(obj[key]);
+        }
+      }
+      break;
+    case 'array':
+      for (i = 0, n = obj.length; i < n; i++) {
+        coerceAll(obj[i]);
+      }
+      break;
+  }
+
+  return obj;
+}
+
 /**
  * any converter
  * any => any
  */
 Normalizer.define('any', function convertAny(val) {
-  return val;
+  return coerceAll(val);
 });
