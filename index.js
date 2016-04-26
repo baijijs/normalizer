@@ -67,6 +67,7 @@ Normalizer.canConvert = function(type) {
  * @returns {Function}
  */
 Normalizer.getConverter = function(type) {
+  type = Array.isArray(type) ? type[0] : type;
   return this.converters[type];
 };
 

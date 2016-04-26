@@ -1,6 +1,6 @@
 {
   "name": "baiji-normalizer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Baiji Normalizer",
   "main": "index.js",
   "scripts": {

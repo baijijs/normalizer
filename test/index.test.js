@@ -25,6 +25,7 @@ describe('Normalizer', function() {
 
     it('should be able convertable if specific converter exists', function() {
       expect(Normalizer.canConvert('addOne')).to.equal(true);
+      expect(Normalizer.canConvert(['addOne'])).to.equal(true);
       expect(Normalizer.canConvert('regexp')).to.equal(false);
     });
 
