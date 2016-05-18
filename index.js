@@ -259,6 +259,7 @@ function coerceAll(obj, coerceLevel) {
  */
 Normalizer.define('any', function convertAny(val, opts) {
   if (!opts) opts = {};
+  // use maxCoerceLevel to prevent circular reference parse error
   var maxCoerceLevel = opts.maxCoerceLevel || 3;
   return coerceAll(val, maxCoerceLevel);
 });
