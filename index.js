@@ -223,10 +223,13 @@ function coerce(str) {
 }
 
 // coerce every string in the given object / array
-function coerceAll(obj) {
+function coerceAll(obj, coerceLevel) {
+  if (coerceLevel === 0) return obj;
   var type = Array.isArray(obj) ? 'array' : typeof obj;
   var i;
   var n;
+
+  coerceLevel--;
 
   switch (type) {
     case 'string':
@@ -236,13 +239,13 @@ function coerceAll(obj) {
         var props = Object.keys(obj);
         for (i = 0, n = props.length; i < n; i++) {
           var key = props[i];
-          obj[key] = coerceAll(obj[key]);
+          obj[key] = coerceAll(obj[key], coerceLevel);
         }
       }
       break;
     case 'array':
       for (i = 0, n = obj.length; i < n; i++) {
-        coerceAll(obj[i]);
+        coerceAll(obj[i], coerceLevel);
       }
       break;
   }
@@ -254,6 +257,8 @@ function coerceAll(obj) {
  * any converter
  * any => any
  */
-Normalizer.define('any', function convertAny(val) {
-  return coerceAll(val);
+Normalizer.define('any', function convertAny(val, opts) {
+  if (!opts) opts = {};
+  var maxCoerceLevel = opts.maxCoerceLevel || 3;
+  return coerceAll(val, maxCoerceLevel);
 });
