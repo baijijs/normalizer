@@ -1,5 +1,4 @@
 var chai = require('chai');
-var util = require('util');
 
 var Normalizer = require('../');
 
@@ -78,6 +77,12 @@ describe('Normalizer', function() {
       expect(new Normalizer([123]).to('any')).to.eql([123]);
       expect(new Normalizer({ a: 1 }).to('any')).to.eql({ a: 1 });
       expect(new Normalizer({ a: '1' }).to('any')).to.eql({ a: 1 });
+
+      var circularExample = {};
+      circularExample.anotherCircularReference = circularExample;
+      expect(function() {
+        new Normalizer(circularExample).to('any');
+      }).not.to.throw(Error);
     });
 
     it('should be converted as boolean', function() {
