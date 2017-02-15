@@ -17,7 +17,7 @@ npm install baiji-normalizer
 
 ``` javascript
 // Built-in Types
-// number, string, date, boolean
+// number, string, date, boolean, object, any
 
 
 var Normalizer = require('baiji-normalizer');

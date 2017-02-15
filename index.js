@@ -136,6 +136,7 @@ Normalizer.prototype.to = function(type) {
  *   date
  *   string
  *   boolean
+ *   object
  *   any
  */
 
@@ -253,13 +254,17 @@ function coerceAll(obj, coerceLevel) {
   return obj;
 }
 
-/**
- * any converter
- * any => any
- */
-Normalizer.define('any', function convertAny(val, opts) {
+// convert object/any type
+function convertAny(val, opts) {
   if (!opts) opts = {};
   // use maxCoerceLevel to prevent circular reference parse error
   var maxCoerceLevel = opts.maxCoerceLevel || 3;
   return coerceAll(val, maxCoerceLevel);
-});
+}
+
+/**
+ * object/any converter
+ * object/any => object/any
+ */
+Normalizer.define('any', convertAny);
+Normalizer.define('object', convertAny);

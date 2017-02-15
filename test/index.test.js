@@ -67,6 +67,7 @@ describe('Normalizer', function() {
       expect(new Normalizer(-123).to('string')).to.equal('-123');
     });
 
+
     it('should be converted as any', function() {
       expect(new Normalizer(undefined).to('any')).to.equal(undefined);
       expect(new Normalizer('undefined').to('any')).to.equal(undefined);
@@ -82,6 +83,24 @@ describe('Normalizer', function() {
       circularExample.anotherCircularReference = circularExample;
       expect(function() {
         new Normalizer(circularExample).to('any');
+      }).not.to.throw(Error);
+    });
+
+    it('should be converted as object', function() {
+      expect(new Normalizer(undefined).to('object')).to.equal(undefined);
+      expect(new Normalizer('undefined').to('object')).to.equal(undefined);
+      expect(new Normalizer(null).to('object')).to.equal(null);
+      expect(new Normalizer('null').to('object')).to.equal(null);
+      expect(new Normalizer('123').to('object')).to.equal(123);
+      expect(new Normalizer(123).to('object')).to.equal(123);
+      expect(new Normalizer([123]).to('object')).to.eql([123]);
+      expect(new Normalizer({ a: 1 }).to('object')).to.eql({ a: 1 });
+      expect(new Normalizer({ a: '1' }).to('object')).to.eql({ a: 1 });
+
+      var circularExample = {};
+      circularExample.anotherCircularReference = circularExample;
+      expect(function() {
+        new Normalizer(circularExample).to('object');
       }).not.to.throw(Error);
     });
 
