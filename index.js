@@ -61,13 +61,33 @@ Normalizer.canConvert = function(type) {
 };
 
 /**
+ * Try to convert value
+ *
+ * @param {String} val
+ * @param {String} type
+ * @param {Object} opts
+ * @returns {Object}
+ */
+Normalizer.tryConvert = function(val, toType, opts) {
+  if (this.canConvert(toType)) {
+    return this.convert(val, toType, opts);
+  } else {
+    return val;
+  }
+};
+
+/**
  * Get converter by type name.
  *
  * @param {String} type
  * @returns {Function}
  */
 Normalizer.getConverter = function(type) {
-  type = Array.isArray(type) ? type[0] : type;
+  if (Array.isArray(type)) {
+    if (type.length > 1) return;
+    type = type[0];
+  }
+
   return this.converters[type];
 };
 
