@@ -85,6 +85,9 @@ describe('Normalizer', function() {
     expect(new Normalizer({ a: 1 }).to('any')).to.eql({ a: 1 });
     expect(new Normalizer({ a: '1' }).to('any')).to.eql({ a: 1 });
 
+    // with coerce = false
+    expect(new Normalizer({ a: '1' }, { coerce: false }).to('any')).to.eql({ a: '1' });
+
     var circularExample = {};
     circularExample.anotherCircularReference = circularExample;
     expect(function() {

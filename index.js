@@ -276,7 +276,9 @@ function convertAny(val, opts) {
   if (!opts) opts = {};
   // use maxCoerceLevel to prevent circular reference parse error
   var maxCoerceLevel = opts.maxCoerceLevel || 3;
-  return coerceAll(val, maxCoerceLevel);
+  // needCoerce option: default to be `true`
+  var needCoerce = opts.coerce !== false;
+  return needCoerce ? coerceAll(val, maxCoerceLevel) : val;
 }
 
 /**
