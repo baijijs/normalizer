@@ -92,6 +92,29 @@ describe('Normalizer', function() {
     }).not.to.throw(Error);
   });
 
+  it('should be converted as array', function() {
+    expect(new Normalizer(undefined).to('array')).to.deep.equal([]);
+    expect(new Normalizer('undefined').to('array')).to.deep.equal([undefined]);
+    expect(new Normalizer(null).to('array')).to.deep.equal([null]);
+    expect(new Normalizer('null').to('array')).to.deep.equal([null]);
+    expect(new Normalizer('123').to('array')).to.deep.equal([123]);
+    expect(new Normalizer(123).to('array')).to.deep.equal([123]);
+    expect(new Normalizer([123]).to('array')).to.deep.eql([123]);
+    expect(new Normalizer({ a: 1 }).to('array')).to.deep.eql([{ a: 1 }]);
+    expect(new Normalizer({ a: '1' }).to('array')).to.deep.eql([{ a: 1 }]);
+
+    expect(Normalizer.convert({ a: '1' }, ['array'])).to.deep.eql([[{ a: 1 }]]);
+    expect(Normalizer.convert('undefined', ['array'])).to.deep.eql([[undefined]]);
+    expect(Normalizer.convert(undefined, ['array'])).to.deep.eql([]);
+    expect(Normalizer.convert(null, ['array'])).to.deep.eql([[null]]);
+
+    var circularExample = {};
+    circularExample.anotherCircularReference = circularExample;
+    expect(function() {
+      new Normalizer(circularExample).to('any');
+    }).not.to.throw(Error);
+  });
+
   it('should be converted as object', function() {
     expect(new Normalizer(undefined).to('object')).to.equal(undefined);
     expect(new Normalizer('undefined').to('object')).to.equal(undefined);

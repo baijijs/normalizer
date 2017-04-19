@@ -127,14 +127,11 @@ Normalizer.convert = function(val, toType, opts) {
       }
     }
 
-    return Normalizer.convert(val, toType[0], opts);
-  }
-
-  if (Array.isArray(val)) {
     return val.map(function(v) {
-      return Normalizer.convert(v, toType, opts);
+      return Normalizer.convert(v, toType[0], opts);
     });
   }
+
   return (new Normalizer(val, opts)).to(toType);
 };
 
@@ -288,3 +285,10 @@ function convertAny(val, opts) {
  */
 Normalizer.define('any', convertAny);
 Normalizer.define('object', convertAny);
+
+/**
+ * array converter
+ */
+Normalizer.define('array', function convertArray(val, opts) {
+  return Normalizer.convert(val, ['any'], opts);
+});
