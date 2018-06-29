@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/baijijs/normalizer#readme",
   "devDependencies": {
-    "chai": "^3.4.1",
-    "mocha": "^2.3.4"
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
   }
 }
