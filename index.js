@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Expose `Normalizer`.
  */
@@ -247,7 +249,7 @@ function coerceAll(obj, coerceLevel) {
   var i;
   var n;
 
-  coerceLevel--;
+  var _coerceLevel = coerceLevel - 1;
 
   switch (type) {
     case 'string':
@@ -257,13 +259,13 @@ function coerceAll(obj, coerceLevel) {
         var props = Object.keys(obj);
         for (i = 0, n = props.length; i < n; i++) {
           var key = props[i];
-          obj[key] = coerceAll(obj[key], coerceLevel);
+          obj[key] = coerceAll(obj[key], _coerceLevel);
         }
       }
       break;
     case 'array':
       for (i = 0, n = obj.length; i < n; i++) {
-        coerceAll(obj[i], coerceLevel);
+        coerceAll(obj[i], _coerceLevel);
       }
       break;
   }
@@ -275,7 +277,7 @@ function coerceAll(obj, coerceLevel) {
 function convertAny(val, opts) {
   if (!opts) opts = {};
   // use maxCoerceLevel to prevent circular reference parse error
-  var maxCoerceLevel = opts.maxCoerceLevel || 3;
+  var maxCoerceLevel = opts.maxCoerceLevel || 5;
   // needCoerce option: default to be `true`
   var needCoerce = opts.coerce !== false;
   return needCoerce ? coerceAll(val, maxCoerceLevel) : val;
