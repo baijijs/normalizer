@@ -106,35 +106,52 @@ Normalizer.convert = function(val, toType, opts) {
   if (Array.isArray(toType)) {
     assert(toType.length === 1, 'Multiple types converter is not allowed');
 
-    // If we expect an array type and we received a string, parse it with JSON.
-    // If that fails, parse it with the arrayItemDelimiters option.
-    if (val && typeof val === 'string') {
-      var parsed = false;
-      if (val[0] === '[') {
-        try {
-          val = JSON.parse(val);
-          parsed = true;
-        } catch (e) { /* Do nothing */ }
-      }
-      if (!parsed && opts.arrayItemDelimiters) {
-        val = val.split(opts.arrayItemDelimiters);
-      }
-    }
+    // Convert val to array
+    val = Normalizer.convertArray(val, opts);
 
-    if (!Array.isArray(val)) {
-      if (val === undefined || val === '') {
-        val = [];
-      } else {
-        val = [val];
-      }
-    }
-
+    // Parse array inner value
     return val.map(function(v) {
       return Normalizer.convert(v, toType[0], opts);
     });
   }
 
   return (new Normalizer(val, opts)).to(toType);
+};
+
+/**
+ * Convert value to array
+ *
+ * @param {String} val
+ * @param {Object} opts
+ * @returns {Array}
+ */
+Normalizer.convertArray = function(val, opts) {
+  if (!opts) opts = {};
+
+  // If we expect an array type and we received a string, parse it with JSON.
+  // If that fails, parse it with the arrayItemDelimiters option.
+  if (val && typeof val === 'string') {
+    var parsed = false;
+    if (val[0] === '[') {
+      try {
+        val = JSON.parse(val);
+        parsed = true;
+      } catch (e) { /* Do nothing */ }
+    }
+    if (!parsed && opts.arrayItemDelimiters) {
+      val = val.split(opts.arrayItemDelimiters);
+    }
+  }
+
+  if (!Array.isArray(val)) {
+    if (val === undefined || val === '') {
+      val = [];
+    } else {
+      val = [val];
+    }
+  }
+
+  return val;
 };
 
 /**
