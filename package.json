@@ -1,6 +1,6 @@
 {
   "name": "baiji-normalizer",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Baiji Normalizer",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/baijijs/normalizer#readme",
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "chai": "^4.3.0",
+    "mocha": "^6.2.3"
   }
 }
