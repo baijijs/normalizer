@@ -85,6 +85,7 @@ Normalizer.define('boolean', function(val, opts) {
 # Normalizer.undefine(type, converterFn) => undefine a converter
 # Normalizer.canConvert(type)            => check if a type can be converted
 # Normalizer.getConverter(type)          => get a specific converter
+# Normalizer.convertArray(val, opts)          => convert val to array
 ```
 
 # License
