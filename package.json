@@ -23,6 +23,6 @@
   "homepage": "https://github.com/baijijs/normalizer#readme",
   "devDependencies": {
     "chai": "^4.3.0",
-    "mocha": "^6.2.3"
+    "mocha": "^10.2.0"
   }
 }
